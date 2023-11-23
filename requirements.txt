@@ -2,5 +2,7 @@ pandas
 plotly
 streamlit
 matplotlib
+lapack
+blas
 scipy==1.4.1
 scikit-learn
