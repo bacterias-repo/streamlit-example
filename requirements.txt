@@ -1,1 +1,7 @@
 yfinance
+welly
+lasio
+wellpathpy
+plotly
+missingno
+xlwt
