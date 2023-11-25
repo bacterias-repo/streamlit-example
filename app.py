@@ -9,6 +9,7 @@ from sklearn.model_selection import train_test_split
 import random
 import pickle
 import numpy as np
+import requests
 
 # Cargar el archivo LAS y convertirlo a un DataFrame
 # URL del archivo LAS en GitHub
