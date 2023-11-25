@@ -1,7 +1,5 @@
-yfinance
-welly
 lasio
-wellpathpy
-plotly
-missingno
-xlwt
+pandas
+matplotlib
+scikit-learn
+numpy
