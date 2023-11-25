@@ -11,10 +11,22 @@ import pickle
 import numpy as np
 
 # Cargar el archivo LAS y convertirlo a un DataFrame
-las = lasio.read("/content/drive/MyDrive/0. B/MLE/2023/Operación/Proyectos/Proyectos Activos/6. Pedro Caicedo - Tareas/Proyecto/Parámetros Akacías 78 15-08-2022 0516h.las", autodetect_encoding=True, ignore_header_errors=True, encoding='latin1', engine='normal')
-df = las.df()
-datos = df.copy()
-datos = datos.dropna()
+# URL del archivo LAS en GitHub
+las_file_url = "https://raw.githubusercontent.com/bacterias-repo/streamlit-example/master/Par%C3%A1metros%20Akac%C3%ADas%2078%2015-08-2022%200516h.las"
+
+# Descargar el archivo LAS desde GitHub
+response = requests.get(las_file_url)
+
+# Verificar si la descarga fue exitosa
+if response.status_code == 200:
+    # Crear un objeto StringIO a partir del contenido descargado
+    las_content = io.StringIO(response.text)
+
+    # Cargar el archivo LAS y convertirlo a un DataFrame
+    las = lasio.read(las_content, autodetect_encoding=True, ignore_header_errors=True, encoding='latin1', engine='normal')
+    df = las.df()
+    datos = df.copy()
+    datos = datos.dropna()
 
 # Crear una página web con Streamlit
 st.title("Visualización de Regresión")
