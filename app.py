@@ -10,6 +10,7 @@ import random
 import pickle
 import numpy as np
 import requests
+import io
 
 # Cargar el archivo LAS y convertirlo a un DataFrame
 # URL del archivo LAS en GitHub
