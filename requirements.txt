@@ -4,3 +4,5 @@ matplotlib
 scikit-learn
 numpy
 requests
+tensorflow
+io
