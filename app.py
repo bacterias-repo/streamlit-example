@@ -22,7 +22,7 @@ if archivo_las is not None:
     # Leer el contenido del archivo LAS con lasio
     bytes_data = archivo_las.read()
     str_io = StringIO(bytes_data.decode('Windows-1252'))
-    las_file = lasio.read(str_io)
+    las_file = lasio.read(str_io, autodetect_encoding=True, ignore_header_errors=True, encoding='latin1', engine='normal')
     datos = las_file.df()
     datos = datos.dropna()
     
