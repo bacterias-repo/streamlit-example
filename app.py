@@ -23,7 +23,7 @@ if archivo_las is not None:
 
     # Guardar el archivo .LAS en disco
     with open(nombre_archivo, "rb") as f:
-        f.write(archivo_las.read())
+        las_file = lasio.read(f)
 
     # Imprimir mensaje de éxito
     st.success(f"Archivo {nombre_archivo} cargado correctamente")
