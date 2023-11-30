@@ -21,7 +21,11 @@ if archivo_las is not None:
     # Imprimir mensaje de éxito
     st.success(f"Archivo {nombre_archivo} cargado correctamente")
 
-    datos = archivo_las.df()
+    # Cargar los datos del archivo .LAS utilizando lasio
+    las_file = lasio.read(archivo_las)
+    # Convertir los datos a un DataFrame de pandas
+    datos = las_file.df()
+
     datos = datos.dropna()
 
     # se visualiza el comportamiento de las variable de interés
