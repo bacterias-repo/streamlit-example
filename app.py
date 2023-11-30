@@ -9,7 +9,6 @@ from sklearn.ensemble import ExtraTreesRegressor, GradientBoostingRegressor, Ran
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import r2_score, mean_squared_error
 import pandas as pd
-import os
 from io import StringIO
 
 # MODELO DE RED NEURONAL -------------------------------------------------------------------------------
@@ -29,64 +28,54 @@ model.add(Dense(1, activation='linear'))  # Capa de salida con activación linea
 model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mse'])
 # MODELO DE RED NEURONAL -------------------------------------------------------------------------------
 
-
 # Título de la aplicación
 st.title("Deep Learning para la predicción de la ROP")
 
 # Widget para cargar un archivo .LAS
 archivo_las = st.file_uploader("Selecciona un archivo .LAS", type=["las"])
 
+@st.cache  # Almacenar en caché la carga de datos y los cálculos relacionados con el modelo
+def cargar_datos_y_entrenar_modelo(archivo_las):
+    if archivo_las is not None:
+        # Leer el contenido del archivo LAS con lasio
+        bytes_data = archivo_las.read()
+        str_io = StringIO(bytes_data.decode('Windows-1252'))
+        las_file = lasio.read(str_io)
+        datos = las_file.df()
+        datos = datos.dropna()
+
+        variables = ['DBTM', 'DMEA', 'BLKPOS', 'ECD_T', 'HKLA', 'MDIA', 'FLOWIN_T', 'RPM_T', 'SPP_T', 'TVA', 'TOR_T', 'WOB_T']
+
+        # se toman los datos de las variables que se escogieron como variables predictoras
+        datosX = datos[variables]
+        # se extrae la variable a predecir
+        datosY = datos.ROP_T
+
+        # se dividen los datos en 70%, 30% de manera aleatoria
+        X_train, X_test, y_train, y_test = train_test_split(datosX.values, datosY.values, test_size=0.3, random_state=0)
+
+        # se instancian los métodos de regresión
+        # no se ponen tildes en el nombre para poder guardar el modelo con esta misma variable
+        regresores = [("Extra_Trees_Regressor", ExtraTreesRegressor()),
+                      ("Gradient_Boosting_Regressor", GradientBoostingRegressor()),
+                      ("Arboles_de_decision", DecisionTreeRegressor()),
+                      ("Bosques_aleatorios", RandomForestRegressor()),
+                      ("Red_neuronal", model)]
+        
+        return X_train, X_test, y_train, y_test, regresores
+
 if archivo_las is not None:
-    # Leer el contenido del archivo LAS con lasio
-    bytes_data = archivo_las.read()
-    str_io = StringIO(bytes_data.decode('Windows-1252'))
-    las_file = lasio.read(str_io)#, autodetect_encoding=True, ignore_header_errors=True, encoding='latin1', engine='normal')
-    datos = las_file.df()
-    datos = datos.dropna()
-    
-
-    # se visualiza el comportamiento de las variable de interés
-    # se crea un vector de igual número de elementos de todos las muestras
-    xpoints = [i for i in range(datos.shape[0])]
-    # se toman las medidas de viscosidad
-    ypoints = datos.ROP_T.values
-    fig = plt.figure(figsize=(15, 5))
-    # se pintan
-    plt.scatter(xpoints, ypoints)
-    plt.title('Tiempo vs ROP')
-    st.pyplot(fig)
-
-    variables = ['DBTM', 'DMEA', 'BLKPOS', 'ECD_T', 'HKLA', 'MDIA', 'FLOWIN_T', 'RPM_T', 'SPP_T', 'TVA', 'TOR_T', 'WOB_T']
-
-    # se toman los datos de las variables que se escogieron como variables predictoras
-    datosX = datos[variables]
-    # se extrae la variable a predecir
-    datosY = datos.ROP_T
-
-    # se dividen los datos en 70%, 30% de manera aleatoria
-    X_train, X_test, y_train, y_test = train_test_split(datosX.values, datosY.values, test_size=0.3, random_state=0)
-
-    # se instancian los métodos de regresión
-    # no se ponen tildes en el nombre para poder guardar el modelo con esta misma variable
-    regresores = [("Extra_Trees_Regressor", ExtraTreesRegressor()),
-                  ("Gradient_Boosting_Regressor", GradientBoostingRegressor()),
-                  ("Arboles_de_decision", DecisionTreeRegressor()),
-                  ("Bosques_aleatorios", RandomForestRegressor()),
-                  ("Red_neuronal", model)]
-    # se toman 100 puntos aleatorios de los datos de test para poder visualizar el rendimiento de los métodos
-    points = [random.randint(1, X_test.shape[0]) for i in range(100)]
+    X_train, X_test, y_train, y_test, regresores = cargar_datos_y_entrenar_modelo(archivo_las)
 
     # Dropdown para seleccionar el modelo
     modelo_seleccionado = st.selectbox("Selecciona un modelo", [nombre for nombre, _ in regresores])
 
     for nombre, regresor in regresores:
         if nombre == modelo_seleccionado:
-            # se entrena cada método con los datos de test
-            regresor.fit(X_train, y_train)
             # se realizan las predicciones para cada método en los datos de test
             predicciones = regresor.predict(X_test)
             # se crean los puntos del eje x para plotear, 100 porque fue el número de puntos que se escogió para ver
-            xpoints = [i for i in range(100)]
+            points = [random.randint(1, X_test.shape[0]) for i in range(100)]
             # se escogen las predicciones correspondientes a los 100 puntos
             ypoints = predicciones[points]
             # se toman los mismos 100 puntos para comparar con las predicciones
@@ -97,16 +86,16 @@ if archivo_las is not None:
             plt.scatter(xpoints, reales, s=50, edgecolors='black', c='yellow', label='reales')
             # se pintan las predicciones
             plt.scatter(xpoints, ypoints, s=20, c='red', label='predicciones')
-    
+
             # se calcula el score r cuadrado entre las predicciones y los datos reales
             # rscore = r2_score(y_test, predicciones);
             # plt.title('Predicciones '+nombre+" -- R2:"+str(rscore));
-    
+
             MSE = mean_squared_error(y_test, predicciones)  # Error cuadrático medio para la red neuronal
             R2 = r2_score(y_test, predicciones)  # Coeficiente de determinación para la red neuronal
             RMSE = np.sqrt(MSE)  # Raíz del error cuadrático medio para la red neuronal
             plt.title('Pred ' + nombre + " -- R2:" + str(R2) + " -- MSE:" + str(MSE) + " -- RMSE:" + str(RMSE))
-    
+
             # pinta el cuadro de convecciones
             plt.legend()
             st.pyplot(fig)
