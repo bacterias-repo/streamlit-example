@@ -27,7 +27,7 @@ if archivo_las is not None:
         datos[curve.mnemonic] = las_file[curve.mnemonic]
 
     # Crear un DataFrame de Pandas a partir de los datos procesados
-    datos = pd.DataFrame(datos))
+    datos = pd.DataFrame(datos)
     datos = datos.dropna()
 
     # se visualiza el comportamiento de las variable de interés
