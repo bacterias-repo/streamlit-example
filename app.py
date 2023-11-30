@@ -63,5 +63,4 @@ def main():
 
         # Puedes agregar gráficos adicionales aquí según tus necesidades
 
-if __name__ == "__main__":
-    main()
+main()
