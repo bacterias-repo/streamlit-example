@@ -18,10 +18,16 @@ st.title("Deep Learning para la predicción de la ROP")
 archivo_las = st.file_uploader("Selecciona un archivo .LAS", type=["las"])
 
 if archivo_las is not None:
-    datos = archivo_las.read()
-    
-    # Convertir los datos a un DataFrame de pandas
-    datos = datos.df()
+    # Leer el contenido del archivo LAS con lasio
+    las_file = lasio.read(archivo_las)
+
+    # Obtener los datos de las curvas
+    datos = {}
+    for curve in las_file.curves:
+        datos[curve.mnemonic] = las_file[curve.mnemonic]
+
+    # Crear un DataFrame de Pandas a partir de los datos procesados
+    datos = pd.DataFrame(datos))
     datos = datos.dropna()
 
     # se visualiza el comportamiento de las variable de interés
