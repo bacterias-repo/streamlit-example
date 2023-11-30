@@ -109,8 +109,4 @@ if archivo_las is not None:
     
             # pinta el cuadro de convecciones
             plt.legend()
-            # guardar el modelo en disco
-            filename = nombre + 'modelo.sav'
-            pickle.dump(regresor, open(filename, 'wb'))
-            print(filename)
             st.pyplot(fig)
