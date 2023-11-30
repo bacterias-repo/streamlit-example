@@ -21,7 +21,7 @@ from tensorflow.keras.layers import Dense, Dropout
 model = Sequential()
 
 # Agregar capas ocultas personalizadas
-model.add(Dense(128, activation='relu', input_shape=(X_train.shape[1],)))
+model.add(Dense(128, activation='relu', input_shape=(12,)))
 model.add(Dense(64, activation='relu'))
 model.add(Dense(1, activation='linear'))  # Capa de salida con activación lineal para regresión
 
