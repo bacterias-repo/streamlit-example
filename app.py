@@ -1,4 +1,5 @@
 import streamlit as st
+import lasio
 import matplotlib.pyplot as plt
 import pickle
 import random
@@ -7,7 +8,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import ExtraTreesRegressor, GradientBoostingRegressor, RandomForestRegressor
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import r2_score, mean_squared_error
-import lasio
+import pandas as pd
+import os
 
 # Título de la aplicación
 st.title("Deep Learning para la predicción de la ROP")
@@ -19,13 +21,22 @@ if archivo_las is not None:
     # Obtenemos el nombre del archivo
     nombre_archivo = archivo_las.name
 
+    # Guardar el archivo .LAS en disco
+    with open(nombre_archivo, "wb") as f:
+        f.write(archivo_las.read())
+
     # Imprimir mensaje de éxito
     st.success(f"Archivo {nombre_archivo} cargado correctamente")
 
     # Cargar los datos del archivo .LAS utilizando lasio
-    las_file = lasio.read(archivo_las)
+    with open(nombre_archivo, "rb") as f:
+        las_file = lasio.read(f)
+    
     # Convertir los datos a un DataFrame de pandas
     datos = las_file.df()
+
+    # Resto del código para visualizar y entrenar modelos...
+    os.remove(nombre_archivo)  # Eliminar el archivo después de su uso
 
     datos = datos.dropna()
 
