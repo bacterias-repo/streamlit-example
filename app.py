@@ -22,7 +22,7 @@ if archivo_las is not None:
     nombre_archivo = archivo_las.name
 
     # Guardar el archivo .LAS en disco
-    with open(nombre_archivo, "wb") as f:
+    with open(nombre_archivo, "rb") as f:
         f.write(archivo_las.read())
 
     # Imprimir mensaje de éxito
