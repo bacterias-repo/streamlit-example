@@ -34,7 +34,7 @@ st.title("Deep Learning para la predicción de la ROP")
 # Widget para cargar un archivo .LAS
 archivo_las = st.file_uploader("Selecciona un archivo .LAS", type=["las"])
 
-@st.cache  # Almacenar en caché la carga de datos y los cálculos relacionados con el modelo
+@st.cache  # Almacenar en caché la carga de datos y el entrenamiento del modelo
 def cargar_datos_y_entrenar_modelo(archivo_las):
     if archivo_las is not None:
         # Leer el contenido del archivo LAS con lasio
@@ -62,10 +62,14 @@ def cargar_datos_y_entrenar_modelo(archivo_las):
                       ("Bosques_aleatorios", RandomForestRegressor()),
                       ("Red_neuronal", model)]
         
-        return X_train, X_test, y_train, y_test, regresores
+        for nombre, regresor in regresores:
+            # se entrena cada método con los datos de entrenamiento
+            regresor.fit(X_train, y_train)
+        
+        return X_test, y_test, regresores
 
 if archivo_las is not None:
-    X_train, X_test, y_train, y_test, regresores = cargar_datos_y_entrenar_modelo(archivo_las)
+    X_test, y_test, regresores = cargar_datos_y_entrenar_modelo(archivo_las)
 
     # Dropdown para seleccionar el modelo
     modelo_seleccionado = st.selectbox("Selecciona un modelo", [nombre for nombre, _ in regresores])
