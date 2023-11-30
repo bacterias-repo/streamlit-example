@@ -19,16 +19,12 @@ archivo_las = st.file_uploader("Selecciona un archivo .LAS", type=["las"])
 
 if archivo_las is not None:
     # Leer el contenido del archivo LAS con lasio
-    las_file = lasio.read(archivo_las)
-
-    # Obtener los datos de las curvas
-    datos = {}
-    for curve in las_file.curves:
-        datos[curve.mnemonic] = las_file[curve.mnemonic]
-
-    # Crear un DataFrame de Pandas a partir de los datos procesados
-    datos = pd.DataFrame(datos)
+    bytes_data = archivo_las.read()
+    str_io = StringIO(bytes_data.decode('Windows-1252'))
+    las_file = lasio.read(str_io)
+    datos = las_file.df()
     datos = datos.dropna()
+    
 
     # se visualiza el comportamiento de las variable de interés
     # se crea un vector de igual número de elementos de todos las muestras
