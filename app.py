@@ -18,26 +18,10 @@ st.title("Deep Learning para la predicción de la ROP")
 archivo_las = st.file_uploader("Selecciona un archivo .LAS", type=["las"])
 
 if archivo_las is not None:
-    # Obtenemos el nombre del archivo
-    nombre_archivo = archivo_las.name
-
-    # Guardar el archivo .LAS en disco
-    with open(nombre_archivo, "rb") as f:
-        las_file = lasio.read(f)
-
-    # Imprimir mensaje de éxito
-    st.success(f"Archivo {nombre_archivo} cargado correctamente")
-
-    # Cargar los datos del archivo .LAS utilizando lasio
-    with open(nombre_archivo, "rb") as f:
-        las_file = lasio.read(f)
+    datos = archivo_las.read()
     
     # Convertir los datos a un DataFrame de pandas
-    datos = las_file.df()
-
-    # Resto del código para visualizar y entrenar modelos...
-    os.remove(nombre_archivo)  # Eliminar el archivo después de su uso
-
+    datos = datos.df()
     datos = datos.dropna()
 
     # se visualiza el comportamiento de las variable de interés
