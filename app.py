@@ -12,6 +12,24 @@ import pandas as pd
 import os
 from io import StringIO
 
+# MODELO DE RED NEURONAL -------------------------------------------------------------------------------
+import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Dropout
+
+# Crear un modelo secuencial
+model = Sequential()
+
+# Agregar capas ocultas personalizadas
+model.add(Dense(128, activation='relu', input_shape=(X_train.shape[1],)))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(1, activation='linear'))  # Capa de salida con activación lineal para regresión
+
+# Compilar el modelo
+model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mse'])
+# MODELO DE RED NEURONAL -------------------------------------------------------------------------------
+
+
 # Título de la aplicación
 st.title("Deep Learning para la predicción de la ROP")
 
@@ -53,7 +71,8 @@ if archivo_las is not None:
     regresores = [("Extra_Trees_Regressor", ExtraTreesRegressor()),
                   ("Gradient_Boosting_Regressor", GradientBoostingRegressor()),
                   ("Arboles_de_decision", DecisionTreeRegressor()),
-                  ("Bosques_aleatorios", RandomForestRegressor())]
+                  ("Bosques_aleatorios", RandomForestRegressor()),
+                  ("Red_neuronal", model)]
     # se toman 100 puntos aleatorios de los datos de test para poder visualizar el rendimiento de los métodos
     points = [random.randint(1, X_test.shape[0]) for i in range(100)]
 
