@@ -57,8 +57,14 @@ def eda_datos(datos):
         # Correlaciones
         st.write("### Correlaciones")
         corr = datos.corr()
-        st.write(sns.heatmap(corr, annot=True, cmap='coolwarm'))
-        st.pyplot()
+        
+        # Crear una figura y un eje con Matplotlib
+        fig, ax = plt.subplots()
+        sns.heatmap(corr, annot=True, cmap='coolwarm', ax=ax)
+        
+        # Mostrar la figura en Streamlit
+        st.pyplot(fig)
+
 
         # Datos faltantes
         st.write("### Datos Faltantes")
