@@ -11,6 +11,7 @@ from sklearn.metrics import r2_score, mean_squared_error
 import pandas as pd
 import os
 from io import StringIO
+import seaborn as sns
 
 # FUNCIONES --------------------------------------------------------------------------------------------
 def eda_datos(datos):
