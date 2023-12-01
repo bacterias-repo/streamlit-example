@@ -167,10 +167,10 @@ if archivo is not None:
 
     # LIMPIAR LOS DATOS
     metodo = st.selectbox("Elige un método de limpieza:", ["Método 1", "Método 2", "Método 3", "Método 4", "Método 5", "Método 6", "Método 7", "Método 8"], index=0)
-    
+    """
     if metodo == "Método 1":
         datos = imputacion_knn(datos)
-    """
+    
     elif metodo == "Método 2":
         datos = eliminar_valores_faltantes(datos)
     elif metodo == "Método 3":
