@@ -169,7 +169,7 @@ if archivo is not None:
     metodo = st.selectbox("Elige un método de limpieza:",
                               ["Método 1", "Método 2", "Método 3", "Método 4",
                                "Método 5", "Método 6", "Método 7", "Método 8"])
-
+"""
     if metodo == "Método 1":
         datos = imputacion_knn(datos)
     elif metodo == "Método 2":
@@ -186,7 +186,7 @@ if archivo is not None:
         datos = eliminar_columnas_nan_outliers(datos)
     elif metodo == "Método 8":
         datos = eliminar_correlacion_nan_outliers(datos)
-
+"""
     st.write("Datos después de la limpieza:")
     st.dataframe(datos)
     datos = datos.dropna()
