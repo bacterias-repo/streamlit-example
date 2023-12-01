@@ -12,6 +12,7 @@ import pandas as pd
 import os
 from io import StringIO
 import seaborn as sns
+import scipy.stats as stats
 
 # FUNCIONES --------------------------------------------------------------------------------------------
 def eda_datos(datos):
