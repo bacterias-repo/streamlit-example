@@ -146,6 +146,9 @@ model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mse'])
 # Título de la aplicación
 st.title("Deep Learning para la predicción de la ROP")
 
+# LIMPIAR LOS DATOS
+metodo = st.selectbox("Elige un método de limpieza:", ["Método 1", "Método 2", "Método 3", "Método 4", "Método 5", "Método 6", "Método 7", "Método 8"], index=0)
+
 # Widget para cargar un archivo
 archivo = st.file_uploader("Selecciona un archivo (.LAS, .XLSX, .CSV)", type=["las", "xlsx", "csv"])
 
@@ -165,12 +168,10 @@ if archivo is not None:
     # MOSTRAR LA EXPLORACIÓN DE LOS DATOS
     eda_datos(datos)
 
-    # LIMPIAR LOS DATOS
-    metodo = st.selectbox("Elige un método de limpieza:", ["Método 1", "Método 2", "Método 3", "Método 4", "Método 5", "Método 6", "Método 7", "Método 8"], index=0)
-    """
+    
     if metodo == "Método 1":
         datos = imputacion_knn(datos)
-    
+    """
     elif metodo == "Método 2":
         datos = eliminar_valores_faltantes(datos)
     elif metodo == "Método 3":
