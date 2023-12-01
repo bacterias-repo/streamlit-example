@@ -24,6 +24,15 @@ def eda_datos(datos):
     if datos is not None:
         st.write("## Análisis Exploratorio de Datos")
 
+        # Datos completos
+        xpoints = [i for i in range(datos.shape[0])]
+        ypoints = datos.ROP_T.values
+        fig = plt.figure(figsize=(15, 5))
+        # se pintan
+        plt.scatter(xpoints, ypoints)
+        plt.title('Tiempo vs ROP')
+        st.pyplot(fig)
+
         # Estadísticas descriptivas
         st.write("### Estadísticas Descriptivas")
         st.dataframe(datos.describe())
@@ -102,16 +111,7 @@ if archivo is not None:
     datos = datos.dropna()
     
 
-    # se visualiza el comportamiento de las variable de interés
-    # se crea un vector de igual número de elementos de todos las muestras
-    xpoints = [i for i in range(datos.shape[0])]
-    # se toman las medidas de viscosidad
-    ypoints = datos.ROP_T.values
-    fig = plt.figure(figsize=(15, 5))
-    # se pintan
-    plt.scatter(xpoints, ypoints)
-    plt.title('Tiempo vs ROP')
-    st.pyplot(fig)
+    
 
     variables = ['DBTM', 'DMEA', 'BLKPOS', 'ECD_T', 'HKLA', 'MDIA', 'FLOWIN_T', 'RPM_T', 'SPP_T', 'TVA', 'TOR_T', 'WOB_T']
 
