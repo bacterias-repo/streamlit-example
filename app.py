@@ -1,19 +1,24 @@
-import streamlit as st
-import lasio
-import matplotlib.pyplot as plt
-import pickle
-import random
-import numpy as np
-from sklearn.model_selection import train_test_split
 from sklearn.ensemble import ExtraTreesRegressor, GradientBoostingRegressor, RandomForestRegressor
-from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import r2_score, mean_squared_error
-import pandas as pd
-import os
-from io import StringIO
-import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.impute import KNNImputer
+import matplotlib.pyplot as plt
 import scipy.stats as stats
+from io import StringIO
+import streamlit as st
+import seaborn as sns
+import pandas as pd
+import numpy as np
+import random
+import pickle
+import lasio
+import os
 
+
+
+# -----------------------------------------------------------------------------------------------------------------
 # FUNCIONES AUXILIARES --------------------------------------------------------------------------------------------
 def eda_datos(datos):
     """
@@ -74,8 +79,6 @@ def eda_datos(datos):
         st.write("### Filas Duplicadas")
         st.write("Número de filas duplicadas:", datos.duplicated().sum())
 
-
-
 def imputacion_knn(datos):
     imputer = KNNImputer(n_neighbors=2)
     datos_imputados = imputer.fit_transform(datos.select_dtypes(include=[np.number]))
@@ -117,11 +120,12 @@ def eliminar_correlacion_nan_outliers(datos):
     z_scores = np.abs(stats.zscore(datos.select_dtypes(include=[np.number])))
     return datos[(z_scores < 3).all(axis=1)]
     
-# FIN DE FUNCIONES AUXILIARES --------------------------------------------------------------------------
-# ------------------------------------------------------------------------------------------------------
+# FIN DE FUNCIONES AUXILIARES -------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------------
 
 
-# MODELO DE RED NEURONAL -------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------------
+# MODELO DE RED NEURONAL ------------------------------------------------------------------------------------------
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout
@@ -136,7 +140,9 @@ model.add(Dense(1, activation='linear'))  # Capa de salida con activación linea
 
 # Compilar el modelo
 model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mse'])
-# MODELO DE RED NEURONAL -------------------------------------------------------------------------------
+
+# MODELO DE RED NEURONAL ------------------------------------------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------------
 
 
 # Título de la aplicación
