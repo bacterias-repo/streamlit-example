@@ -33,9 +33,6 @@ model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mse'])
 # Título de la aplicación
 st.title("Deep Learning para la predicción de la ROP")
 
-# Widget para cargar un archivo .LAS
-archivo_las = st.file_uploader("Selecciona un archivo .LAS", type=["las"])
-
 # Widget para cargar un archivo
 archivo = st.file_uploader("Selecciona un archivo (.LAS, .XLSX, .CSV)", type=["las", "xlsx", "csv"])
 
