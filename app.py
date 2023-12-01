@@ -36,12 +36,25 @@ st.title("Deep Learning para la predicción de la ROP")
 # Widget para cargar un archivo .LAS
 archivo_las = st.file_uploader("Selecciona un archivo .LAS", type=["las"])
 
-if archivo_las is not None:
-    # Leer el contenido del archivo LAS con lasio
-    bytes_data = archivo_las.read()
-    str_io = StringIO(bytes_data.decode('Windows-1252'))
-    las_file = lasio.read(str_io)#, autodetect_encoding=True, ignore_header_errors=True, encoding='latin1', engine='normal')
-    datos = las_file.df()
+# Widget para cargar un archivo
+archivo = st.file_uploader("Selecciona un archivo (.LAS, .XLSX, .CSV)", type=["las", "xlsx", "csv"])
+
+if archivo is not None:
+    # Verificar tipo de archivo y procesar
+    if archivo.name.endswith('.las'):
+        # Procesar archivo LAS
+        bytes_data = archivo.read()
+        str_io = StringIO(bytes_data.decode('Windows-1252'))
+        las_file = lasio.read(str_io)
+        datos = las_file.df()
+    elif archivo.name.endswith(('.xlsx', '.csv')):
+        # Procesar archivo Excel o CSV
+        datos = pd.read_excel(archivo) if archivo.name.endswith('.xlsx') else pd.read_csv(archivo)
+
+
+
+
+    
     datos = datos.dropna()
     
 
