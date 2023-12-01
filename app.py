@@ -25,6 +25,7 @@ def eda_datos(datos):
         st.write("## Análisis Exploratorio de Datos")
 
         # Datos completos
+        st.write("### Visualización de la ROP")
         xpoints = [i for i in range(datos.shape[0])]
         ypoints = datos.ROP_T.values
         fig = plt.figure(figsize=(15, 5))
