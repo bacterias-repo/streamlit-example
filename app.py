@@ -12,6 +12,51 @@ import pandas as pd
 import os
 from io import StringIO
 
+# FUNCIONES --------------------------------------------------------------------------------------------
+def eda_datos(datos):
+    """
+    Realiza un análisis exploratorio de datos (EDA) en el DataFrame 'datos'.
+
+    :param datos: DataFrame de Pandas con los datos a analizar.
+    """
+    if datos is not None:
+        st.write("## Análisis Exploratorio de Datos")
+
+        # Estadísticas descriptivas
+        st.write("### Estadísticas Descriptivas")
+        st.dataframe(datos.describe())
+
+        # Tipos de variables
+        st.write("### Tipos de Variables")
+        st.dataframe(datos.dtypes)
+
+        # Dropdown para estadísticas descriptivas de cada columna
+        columna_seleccionada = st.selectbox("Selecciona una columna para más detalles", datos.columns)
+        st.write(datos[columna_seleccionada].describe())
+
+        # Histograma, Boxplot y Q-Q plot
+        st.write("### Visualizaciones de la columna seleccionada")
+        fig, ax = plt.subplots(1, 3, figsize=(15, 5))
+        sns.histplot(datos[columna_seleccionada], kde=True, ax=ax[0])
+        sns.boxplot(y=datos[columna_seleccionada], ax=ax[1])
+        stats.probplot(datos[columna_seleccionada].dropna(), dist="norm", plot=ax[2])
+        st.pyplot(fig)
+
+        # Correlaciones
+        st.write("### Correlaciones")
+        corr = datos.corr()
+        st.write(sns.heatmap(corr, annot=True, cmap='coolwarm'))
+        st.pyplot()
+
+        # Datos faltantes
+        st.write("### Datos Faltantes")
+        st.dataframe(datos.isnull().sum())
+
+        # Filas duplicadas
+        st.write("### Filas Duplicadas")
+        st.write("Número de filas duplicadas:", datos.duplicated().sum())
+
+
 # MODELO DE RED NEURONAL -------------------------------------------------------------------------------
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
@@ -48,7 +93,7 @@ if archivo is not None:
         # Procesar archivo Excel o CSV
         datos = pd.read_excel(archivo) if archivo.name.endswith('.xlsx') else pd.read_csv(archivo)
 
-
+    eda_datos(datos)
 
 
     
