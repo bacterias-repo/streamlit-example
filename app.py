@@ -14,7 +14,7 @@ from io import StringIO
 import seaborn as sns
 import scipy.stats as stats
 
-# FUNCIONES --------------------------------------------------------------------------------------------
+# FUNCIONES AUXILIARES --------------------------------------------------------------------------------------------
 def eda_datos(datos):
     """
     Realiza un análisis exploratorio de datos (EDA) en el DataFrame 'datos'.
@@ -73,6 +73,52 @@ def eda_datos(datos):
         # Filas duplicadas
         st.write("### Filas Duplicadas")
         st.write("Número de filas duplicadas:", datos.duplicated().sum())
+
+
+
+def imputacion_knn(datos):
+    imputer = KNNImputer(n_neighbors=2)
+    datos_imputados = imputer.fit_transform(datos.select_dtypes(include=[np.number]))
+    return pd.DataFrame(datos_imputados, columns=datos.columns)
+
+def eliminar_valores_faltantes(datos):
+    return datos.dropna()
+
+def eliminar_columnas_poco_representativas(datos):
+    # Ejemplo: eliminar columnas con una sola categoría
+    for col in datos.columns:
+        if datos[col].nunique() <= 1:
+            datos.drop(col, axis=1, inplace=True)
+    return datos.dropna()
+
+def eliminar_por_correlacion(datos):
+    corr_matrix = datos.corr().abs()
+    upper = corr_matrix.where(np.triu(np.ones(corr_matrix.shape), k=1).astype(np.bool))
+    to_drop = [column for column in upper.columns if any(upper[column] > 0.95)]
+    return datos.drop(to_drop, axis=1).dropna()
+
+def imputar_knn_eliminar_outliers(datos):
+    datos = imputacion_knn(datos)
+    z_scores = np.abs(stats.zscore(datos.select_dtypes(include=[np.number])))
+    return datos[(z_scores < 3).all(axis=1)]
+
+def eliminar_nan_outliers(datos):
+    datos = eliminar_valores_faltantes(datos)
+    z_scores = np.abs(stats.zscore(datos.select_dtypes(include=[np.number])))
+    return datos[(z_scores < 3).all(axis=1)]
+
+def eliminar_columnas_nan_outliers(datos):
+    datos = eliminar_columnas_poco_representativas(datos)
+    z_scores = np.abs(stats.zscore(datos.select_dtypes(include=[np.number])))
+    return datos[(z_scores < 3).all(axis=1)]
+
+def eliminar_correlacion_nan_outliers(datos):
+    datos = eliminar_por_correlacion(datos)
+    z_scores = np.abs(stats.zscore(datos.select_dtypes(include=[np.number])))
+    return datos[(z_scores < 3).all(axis=1)]
+    
+# FIN DE FUNCIONES AUXILIARES --------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------------------
 
 
 # MODELO DE RED NEURONAL -------------------------------------------------------------------------------
