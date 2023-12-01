@@ -174,9 +174,9 @@ if archivo is not None:
 
 
     # MOSTRAR LA EXPLORACIÓN DE LOS DATOS
+    datos = datos.fillna(value=np.nan)
     eda_datos(datos)
 
-    
     if metodo == "Método 1":
         datos = imputacion_knn(datos)
     elif metodo == "Método 2":
