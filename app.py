@@ -166,33 +166,32 @@ if archivo is not None:
     eda_datos(datos)
 
     # LIMPIAR LOS DATOS
-    if st.checkbox("Seleccionar método de limpieza de datos"):
-        metodo = st.selectbox("Elige un método de limpieza:",
+    metodo = st.selectbox("Elige un método de limpieza:",
                               ["Método 1", "Método 2", "Método 3", "Método 4",
                                "Método 5", "Método 6", "Método 7", "Método 8"])
 
-        if metodo == "Método 1":
-            datos = imputacion_knn(datos)
-        elif metodo == "Método 2":
-            datos = eliminar_valores_faltantes(datos)
-        elif metodo == "Método 3":
-            datos = eliminar_columnas_poco_representativas(datos)
-        elif metodo == "Método 4":
-            datos = eliminar_por_correlacion(datos)
-        elif metodo == "Método 5":
-            datos = imputar_knn_eliminar_outliers(datos)
-        elif metodo == "Método 6":
-            datos = eliminar_nan_outliers(datos)
-        elif metodo == "Método 7":
-            datos = eliminar_columnas_nan_outliers(datos)
-        elif metodo == "Método 8":
-            datos = eliminar_correlacion_nan_outliers(datos)
+    if metodo == "Método 1":
+        datos = imputacion_knn(datos)
+    elif metodo == "Método 2":
+        datos = eliminar_valores_faltantes(datos)
+    elif metodo == "Método 3":
+        datos = eliminar_columnas_poco_representativas(datos)
+    elif metodo == "Método 4":
+        datos = eliminar_por_correlacion(datos)
+    elif metodo == "Método 5":
+        datos = imputar_knn_eliminar_outliers(datos)
+    elif metodo == "Método 6":
+        datos = eliminar_nan_outliers(datos)
+    elif metodo == "Método 7":
+        datos = eliminar_columnas_nan_outliers(datos)
+    elif metodo == "Método 8":
+        datos = eliminar_correlacion_nan_outliers(datos)
 
-        st.write("Datos después de la limpieza:")
-        st.dataframe(datos)
+    st.write("Datos después de la limpieza:")
+    st.dataframe(datos)
     datos = datos.dropna()
 
-    
+    st.write("Entrenamiento de modelos")
     # ENTRENAMIENTO DE LOS DIFRENTES MODELOS
     variables = ['DBTM', 'DMEA', 'BLKPOS', 'ECD_T', 'HKLA', 'MDIA', 'FLOWIN_T', 'RPM_T', 'SPP_T', 'TVA', 'TOR_T', 'WOB_T']
 
