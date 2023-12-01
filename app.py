@@ -16,8 +16,6 @@ import pickle
 import lasio
 import os
 
-
-
 # -----------------------------------------------------------------------------------------------------------------
 # FUNCIONES AUXILIARES --------------------------------------------------------------------------------------------
 def eda_datos(datos):
@@ -125,7 +123,7 @@ def eliminar_correlacion_nan_outliers(datos):
 
 
 # -----------------------------------------------------------------------------------------------------------------
-# MODELO DE RED NEURONAL ------------------------------------------------------------------------------------------
+# ARQITECTURA DE RED NEURONAL -------------------------------------------------------------------------------------
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout
@@ -141,7 +139,7 @@ model.add(Dense(1, activation='linear'))  # Capa de salida con activación linea
 # Compilar el modelo
 model.compile(optimizer='adam', loss='mean_squared_error', metrics=['mse'])
 
-# MODELO DE RED NEURONAL ------------------------------------------------------------------------------------------
+# ARQITECTURA DE RED NEURONAL -------------------------------------------------------------------------------------
 # -----------------------------------------------------------------------------------------------------------------
 
 
@@ -163,15 +161,39 @@ if archivo is not None:
         # Procesar archivo Excel o CSV
         datos = pd.read_excel(archivo) if archivo.name.endswith('.xlsx') else pd.read_csv(archivo)
 
+
+    # MOSTRAR LA EXPLORACIÓN DE LOS DATOS
     eda_datos(datos)
 
+    # LIMPIAR LOS DATOS
+    if st.checkbox("Seleccionar método de limpieza de datos"):
+        metodo = st.selectbox("Elige un método de limpieza:",
+                              ["Método 1", "Método 2", "Método 3", "Método 4",
+                               "Método 5", "Método 6", "Método 7", "Método 8"])
 
-    
+        if metodo == "Método 1":
+            datos = imputacion_knn(datos)
+        elif metodo == "Método 2":
+            datos = eliminar_valores_faltantes(datos)
+        elif metodo == "Método 3":
+            datos = eliminar_columnas_poco_representativas(datos)
+        elif metodo == "Método 4":
+            datos = eliminar_por_correlacion(datos)
+        elif metodo == "Método 5":
+            datos = imputar_knn_eliminar_outliers(datos)
+        elif metodo == "Método 6":
+            datos = eliminar_nan_outliers(datos)
+        elif metodo == "Método 7":
+            datos = eliminar_columnas_nan_outliers(datos)
+        elif metodo == "Método 8":
+            datos = eliminar_correlacion_nan_outliers(datos)
+
+        st.write("Datos después de la limpieza:")
+        st.dataframe(datos)
     datos = datos.dropna()
-    
 
     
-
+    # ENTRENAMIENTO DE LOS DIFRENTES MODELOS
     variables = ['DBTM', 'DMEA', 'BLKPOS', 'ECD_T', 'HKLA', 'MDIA', 'FLOWIN_T', 'RPM_T', 'SPP_T', 'TVA', 'TOR_T', 'WOB_T']
 
     # se toman los datos de las variables que se escogieron como variables predictoras
